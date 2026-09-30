@@ -37,7 +37,7 @@ export function ScrollEffects() {
           reveal.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
+    }, { threshold: 0.12, rootMargin: "0px 0px -4% 0px" });
     if (!reduce) nodes.forEach((node) => reveal.observe(node));
 
     return () => {

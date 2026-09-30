@@ -57,14 +57,14 @@ export default async function HomePage() {
               </div>
               <div className="plate hero-plate">
                 <CoverImage src="/images/hero/hero-portrait.jpg" alt="Visuel de démonstration : portrait beauté" width={800} height={1000} />
-                <LoopVideo src="/videos/demo-maquillage.mp4" poster="/images/hero/hero-portrait.jpg" />
+                <LoopVideo priority src="/videos/demo-maquillage.mp4" poster="/images/hero/hero-portrait.jpg" />
               </div>
             </div>
           </section>
         </div>
 
         <section className="intro-band">
-          <div className="wrap intro reveal">
+          <div className="wrap intro reveal reveal-copy">
             <h2>Plus qu&apos;un maquillage, une expérience.</h2>
             <div>
               <p>LD House of Make Up accompagne chaque projet avec une approche personnalisée, pensée pour révéler la personnalité, le style et l&apos;occasion.</p>
@@ -75,7 +75,7 @@ export default async function HomePage() {
 
         <section id="prestations">
           <div className="wrap">
-            <div className="section-head reveal">
+            <div className="section-head reveal reveal-copy">
               <div>
                 <div className="eyebrow">Prestations</div>
                 <h2>Des catégories pensées pour chaque projet</h2>
@@ -105,7 +105,7 @@ export default async function HomePage() {
 
         <section className="portfolio" id="portfolio">
           <div className="wrap">
-            <div className="section-head reveal">
+            <div className="section-head reveal reveal-copy">
               <div>
                 <div className="eyebrow">Portfolio</div>
                 <h2>Un aperçu de l&apos;univers LD House of Make Up</h2>
@@ -125,7 +125,7 @@ export default async function HomePage() {
             <div className="frame plate reveal reveal-media">
               <CoverImage src="/images/services/service-shooting.jpg" alt="Visuel de démonstration : séance maquillage" width={800} height={1000} loading="lazy" />
             </div>
-            <div className="reveal">
+            <div className="reveal reveal-copy">
               <div className="eyebrow">Approche</div>
               <h2>Chaque visage raconte quelque chose.</h2>
               <p>Une approche personnalisée qui s&apos;adapte au visage, à la personnalité et à l&apos;occasion, pour révéler une beauté qui reste identifiable.</p>
@@ -136,7 +136,7 @@ export default async function HomePage() {
 
         <section className="ateliers" id="ateliers">
           <div className="wrap at-grid">
-            <div className="reveal">
+            <div className="reveal reveal-copy">
               <div className="eyebrow">Ateliers beauté</div>
               <h2>Apprendre, expérimenter, révéler.</h2>
               <div className="at-list">
@@ -163,7 +163,7 @@ export default async function HomePage() {
         </section>
 
         <section className="fxr">
-          <div className="wrap reveal">
+          <div className="wrap reveal reveal-copy">
             <div className="eyebrow">Positionnement</div>
             <h2>Entre la France et la RDC.</h2>
             <p>Une présence qui relie deux univers autour d&apos;une même passion pour la beauté. Les villes d&apos;exercice restent à confirmer.</p>
@@ -185,7 +185,7 @@ export default async function HomePage() {
             <div className="frame plate reveal reveal-media">
               <CoverImage src="/images/about/laura-dineka.jpg" alt="Laura Dineka" width={480} height={640} loading="lazy" />
             </div>
-            <div className="reveal">
+            <div className="reveal reveal-copy about-copy">
               <div className="eyebrow">À propos</div>
               <h2>À propos de Laura</h2>
               <p>Laura Dineka est une professionnelle du maquillage et de la beauté, entre la RDC et la France. Sa biographie complète sera ajoutée ici dès qu&apos;elle sera transmise.</p>
@@ -194,7 +194,7 @@ export default async function HomePage() {
         </section>
 
         <section className="insta">
-          <div className="wrap reveal">
+          <div className="wrap reveal reveal-copy">
             <h2>Retrouvez l&apos;univers LD House of Make Up</h2>
             {instagram ? <div className="handle">{instagram.replace("https://instagram.com/", "@").replace(/\/$/, "")}</div> : null}
             {posts.length === 0 ? (
@@ -223,7 +223,7 @@ export default async function HomePage() {
         </section>
 
         <section className="final" id="contact">
-          <div className="wrap reveal">
+          <div className="wrap reveal reveal-copy">
             <h2>Votre prochain projet mérite une mise en beauté à sa hauteur.</h2>
             <div className="final-ctas">
               <a href="#devis" className="btn btn-primary">Demander un devis</a>
