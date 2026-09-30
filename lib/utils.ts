@@ -54,8 +54,17 @@ export function whatsappHref(raw: string | null | undefined) {
   return `https://wa.me/${digits}`;
 }
 
-export function siteUrl() {
-  return (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, "");
+export async function siteUrl() {
+  const configured = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+  if (configured) return configured;
+  const { headers } = await import("next/headers");
+  const incoming = await headers();
+  const host = incoming.get("x-forwarded-host") || incoming.get("host");
+  if (host && !host.startsWith("localhost") && !host.startsWith("127.0.0.1")) {
+    const proto = incoming.get("x-forwarded-proto") || "https";
+    return `${proto}://${host}`;
+  }
+  return "http://localhost:3000";
 }
 
 export function clientName(client: { firstName: string; lastName: string }) {

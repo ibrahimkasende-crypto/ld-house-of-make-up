@@ -25,7 +25,25 @@ export function ScrollEffects() {
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    const nodes = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
+    if (reduce) {
+      nodes.forEach((node) => node.classList.add("in"));
+    }
+    const reveal = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in");
+          reveal.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
+    if (!reduce) nodes.forEach((node) => reveal.observe(node));
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      reveal.disconnect();
+    };
   }, []);
   return <div className="scroll-progress" id="scrollProgress" />;
 }

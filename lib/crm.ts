@@ -28,7 +28,13 @@ export async function createQuoteRequest(input: QuoteInput) {
     return { ok: false as const, error: parsed.error.issues[0]?.message ?? "Vérifiez le formulaire." };
   }
   const data = parsed.data;
-  const email = data.email.toLowerCase();
+  if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+    return { ok: false as const, error: "L'adresse e-mail n'est pas valide." };
+  }
+  const email = data.email?.trim()
+    ? data.email.trim().toLowerCase()
+    : `demande.${data.phone.replace(/[^\d]/g, "") || "sans-numero"}@clients.ldhouse`;
+  const canEmailClient = !email.endsWith("@clients.ldhouse");
   if (limited(email)) {
     return { ok: false as const, error: "Trop de demandes pour cette adresse. Réessayez dans un moment." };
   }
@@ -47,7 +53,7 @@ export async function createQuoteRequest(input: QuoteInput) {
       .update(clients)
       .set({
         firstName: data.firstName,
-        lastName: data.lastName,
+        lastName: data.lastName || "",
         phone: data.phone,
         country: data.country,
         city: data.city,
@@ -58,7 +64,7 @@ export async function createQuoteRequest(input: QuoteInput) {
     await db.insert(clients).values({
       id: clientId,
       firstName: data.firstName,
-      lastName: data.lastName,
+      lastName: data.lastName || "",
       email,
       phone: data.phone,
       country: data.country,
@@ -89,9 +95,21 @@ export async function createQuoteRequest(input: QuoteInput) {
   });
 
   const clientText = `Bonjour ${data.firstName},\n\nNous avons bien reçu votre demande (${publicRef}) concernant : ${service[0].title}.\nLaura ou son équipe reviendra vers vous rapidement.\n\nLD House of Make Up`;
+  if (!canEmailClient) {
+    await db.insert(messages).values({
+      id: crypto.randomUUID(),
+      requestId,
+      direction: "system",
+      toEmail: "",
+      subject: `Demande ${publicRef} sans e-mail`,
+      body: "Aucun e-mail client : la demande part vers WhatsApp.",
+      status: "logged",
+      createdAt: stamp,
+    });
+  }
   const adminText = `Nouvelle demande ${publicRef}\n${data.firstName} ${data.lastName}\n${email}\n${data.phone}\n${data.city}, ${data.country}\nPrestation : ${service[0].title}\nDate souhaitée : ${data.desiredDate || "non précisée"}\nLieu : ${data.location || "non précisé"}\nPersonnes : ${data.peopleCount || "non précisé"}\nBudget indicatif : ${data.budget || "non précisé"}\n\n${data.message || ""}`;
 
-  await deliver(requestId, "outbound", email, "Nous avons bien reçu votre demande", clientText);
+  if (canEmailClient) await deliver(requestId, "outbound", email, "Nous avons bien reçu votre demande", clientText);
   const adminEmail = process.env.ADMIN_NOTIFY_EMAIL;
   if (adminEmail) {
     await deliver(requestId, "inbound", adminEmail, `Nouvelle demande de prestation ${publicRef}`, adminText);

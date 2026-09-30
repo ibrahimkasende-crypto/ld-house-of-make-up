@@ -3,8 +3,8 @@ import { PORTFOLIO_CATEGORIES, REQUEST_STATUSES, WORKSHOP_KINDS } from "@/lib/db
 
 export const quoteSchema = z.object({
   firstName: z.string().trim().min(1, "Le prénom est requis.").max(80),
-  lastName: z.string().trim().min(1, "Le nom est requis.").max(80),
-  email: z.string().trim().email("L'adresse e-mail n'est pas valide.").max(160),
+  lastName: z.string().trim().max(80).optional().or(z.literal("")),
+  email: z.string().trim().max(160).optional().or(z.literal("")),
   phone: z.string().trim().min(6, "Le téléphone est requis.").max(40),
   country: z.string().trim().min(2, "Le pays est requis.").max(80),
   city: z.string().trim().min(1, "La ville est requise.").max(80),
