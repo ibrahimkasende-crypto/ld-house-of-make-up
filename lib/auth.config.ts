@@ -2,6 +2,7 @@ import type { NextAuthConfig } from "next-auth";
 
 export const authConfig = {
   trustHost: true,
+  secret: process.env.AUTH_SECRET ?? "ldhouse-demo-auth-secret",
   pages: { signIn: "/admin/login" },
   session: { strategy: "jwt" },
   providers: [],
