@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LD House of Make Up — Votre beauté, votre signature</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;1,9..144,450&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6F1E9;
+    --cream-2:#EFE6D8;
+    --espresso:#241A14;
+    --espresso-2:#2E211A;
+    --gold:#AD8A55;
+    --gold-soft:#C9AD7C;
+    --text-muted:#7A6A5A;
+    --line:rgba(36,26,20,.14);
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth; scroll-padding-top:env(safe-area-inset-top,0px);}
+  html,body{height:100%;}
+  body{
+    background:var(--cream);
+    color:var(--espresso);
+    font-family:'Manrope',sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  img,svg{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+  h1,h2,h3,.serif{font-family:'Fraunces',serif;}
+  .eyebrow{font-size:.78rem; letter-spacing:.04em; color:var(--gold); font-weight:600;}
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:15px 30px; border-radius:2px; font-size:.85rem;
+    font-weight:600; letter-spacing:.02em; cursor:pointer; border:1px solid transparent;
+    transition:transform .25s ease, background .25s ease, color .25s ease;
+  }
+  .btn-primary{background:var(--espresso); color:var(--cream);}
+  .btn-primary:hover{transform:translateY(-2px); background:var(--gold);}
+  .btn-ghost{border-color:var(--espresso); color:var(--espresso);}
+  .btn-ghost:hover{background:var(--espresso); color:var(--cream);}
+  .btn-ghost.light{border-color:var(--cream); color:var(--cream);}
+  .btn-ghost.light:hover{background:var(--cream); color:var(--espresso);}
+
+  /* placeholder visual blocks (no external images available) */
+  .plate{position:relative; overflow:hidden; background:linear-gradient(160deg,var(--espresso) 0%,var(--espresso-2) 55%,#3a2c22 100%);}
+  .plate::before{content:""; position:absolute; inset:0; background:
+    radial-gradient(circle at 30% 20%, rgba(173,138,85,.35), transparent 55%),
+    radial-gradient(circle at 80% 85%, rgba(201,173,124,.22), transparent 50%);}
+  .plate::after{content:attr(data-label); position:absolute; left:18px; bottom:16px; color:rgba(246,241,233,.55); font-size:.68rem; letter-spacing:.03em; font-family:'Manrope',sans-serif;}
+  .plate.light{background:linear-gradient(160deg,var(--cream-2) 0%, #E3D6C1 100%);}
+  .plate.light::before{background:radial-gradient(circle at 25% 25%, rgba(173,138,85,.25), transparent 55%);}
+  .plate.light::after{color:rgba(36,26,20,.45);}
+
+  /* header */
+  header{position:sticky; top:0; z-index:50; background:rgba(246,241,233,.92); backdrop-filter:blur(8px); border-bottom:1px solid transparent; padding-top:env(safe-area-inset-top,0px); transition:background .35s ease, border-color .35s ease;}
+  header.scrolled{border-color:var(--line); background:rgba(246,241,233,.97);}
+  .scroll-progress{position:fixed; top:0; left:0; height:2px; width:0%; background:var(--gold); z-index:70; transition:width .1s linear;}
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:18px 24px; max-width:1180px; margin:0 auto; transition:padding .35s ease;}
+  header.scrolled .nav{padding:12px 24px;}
+  .logo{font-family:'Fraunces',serif; font-size:1.05rem; line-height:1.05; letter-spacing:.01em;}
+  .logo span{display:block; font-size:.62rem; letter-spacing:.14em; color:var(--gold); font-weight:600;}
+  .nav-links{display:flex; gap:34px; font-size:.85rem;}
+  .nav-links a{position:relative; padding:4px 0;}
+  .nav-links a::after{content:""; position:absolute; left:0; bottom:0; width:0; height:1px; background:var(--gold); transition:width .3s ease;}
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{display:flex; align-items:center; gap:18px;}
+  .burger{display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:6px;}
+  .burger span{width:22px; height:1.5px; background:var(--espresso);}
+  .mobile-menu{display:none; flex-direction:column; gap:0; background:var(--cream); border-top:1px solid var(--line);}
+  .mobile-menu.open{display:flex;}
+  .mobile-menu a{padding:16px 24px; border-bottom:1px solid var(--line); font-size:.95rem;}
+
+  @media (max-width:860px){
+    .nav-links, .nav-cta .btn-ghost{display:none;}
+    .burger{display:flex;}
+  }
+
+  /* hero */
+  .hero-stage{position:relative; height:170vh;}
+  .hero{padding:64px 0 40px; height:100vh; display:flex; align-items:center; overflow:hidden; position:sticky; top:0;}
+  .hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:56px; align-items:center; width:100%;}
+  #heroContent{will-change:transform,opacity; transform:translateY(var(--hero-shift,0px)); opacity:var(--hero-fade,1);}
+  .hero-tag{display:inline-flex; align-items:center; gap:10px; font-size:.72rem; letter-spacing:.08em; color:var(--text-muted); margin-bottom:22px; opacity:0; animation:heroIn .8s ease forwards .1s;}
+  .hero-tag .dot{width:5px; height:5px; border-radius:50%; background:var(--gold);}
+  .hero h1{font-size:clamp(2.5rem,5vw,4.1rem); font-weight:450; line-height:1.04; letter-spacing:-.01em;}
+  .hero h1 .line-mask{display:block; overflow:hidden;}
+  .hero h1 .line-inner{display:block; opacity:0; transform:translateY(100%); animation:heroLine .9s cubic-bezier(.16,1,.3,1) forwards;}
+  .hero h1 .line-mask:nth-child(2) .line-inner{animation-delay:.18s;}
+  .hero h1 .line-inner.em{font-style:italic; font-weight:450; color:var(--gold);}
+  .hero p.sub{margin-top:22px; max-width:46ch; color:var(--text-muted); font-size:1.05rem; opacity:0; animation:heroIn .8s ease forwards .48s;}
+  .hero-ctas{display:flex; gap:16px; margin-top:34px; flex-wrap:wrap; opacity:0; animation:heroIn .8s ease forwards .64s;}
+  .hero-plate{aspect-ratio:4/5; border-radius:2px; will-change:transform; transform:scale(var(--hero-scale,1));}
+  @keyframes heroIn{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:none;}}
+  @keyframes heroLine{to{opacity:1; transform:none;}}
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr; gap:34px;}
+    .hero-plate{order:-1; aspect-ratio:5/4;}
+  }
+  @media (max-width:640px){ .hero-stage{height:140vh;} }
+  @media (prefers-reduced-motion:reduce){
+    .hero-tag,.hero p.sub,.hero-ctas,.hero h1 .line-inner{opacity:1 !important; transform:none !important; animation:none !important;}
+    #heroContent{transform:none !important; opacity:1 !important;}
+    .hero-plate{transform:none !important;}
+  }
+
+  section{padding:96px 0;}
+  @media (max-width:640px){ section{padding:64px 0;} }
+
+  /* intro */
+  section.intro{background:var(--cream); position:relative; z-index:2; margin-top:-64px; border-radius:28px 28px 0 0; box-shadow:0 -36px 50px -24px rgba(36,26,20,.16); padding-top:100px;}
+  .intro{display:grid; grid-template-columns:1fr 1.3fr; gap:60px; align-items:start;}
+  .intro h2{font-size:clamp(1.8rem,3vw,2.5rem); font-weight:450; line-height:1.15;}
+  .intro-text p{color:var(--text-muted); max-width:52ch;}
+  .signature{margin-top:26px; font-family:'Fraunces',serif; font-style:italic; font-size:1.05rem;}
+  .signature small{display:block; font-family:'Manrope',sans-serif; font-style:normal; font-size:.72rem; letter-spacing:.05em; color:var(--gold); margin-top:4px;}
+  @media (max-width:860px){ .intro{grid-template-columns:1fr;} }
+
+  /* prestations */
+  .section-head{display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:52px; flex-wrap:wrap;}
+  .section-head h2{font-size:clamp(1.8rem,3vw,2.5rem); font-weight:450;}
+  .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:28px;}
+  .card{border:1px solid var(--line); background:var(--cream-2); }
+  .card .plate{aspect-ratio:5/4;}
+  .card-body{padding:24px;}
+  .card-body h3{font-size:1.15rem; font-weight:450; margin-bottom:10px;}
+  .card-body p{color:var(--text-muted); font-size:.92rem; margin-bottom:16px;}
+  .card-body a{font-size:.8rem; font-weight:600; border-bottom:1px solid var(--gold); padding-bottom:2px;}
+  @media (max-width:940px){ .cards{grid-template-columns:1fr 1fr;} }
+  @media (max-width:640px){ .cards{grid-template-columns:1fr;} }
+  .note{margin-top:34px; font-size:.82rem; color:var(--text-muted); font-style:italic;}
+
+  /* portfolio */
+  .portfolio{background:var(--espresso); color:var(--cream);}
+  .portfolio .section-head h2, .portfolio .eyebrow{color:var(--cream);}
+  .portfolio .eyebrow{color:var(--gold-soft);}
+  .filters{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:36px;}
+  .filter-btn{padding:9px 18px; border:1px solid rgba(246,241,233,.3); border-radius:20px; font-size:.78rem; color:rgba(246,241,233,.75); cursor:pointer; background:none; transition:all .25s ease;}
+  .filter-btn.active, .filter-btn:hover{border-color:var(--gold-soft); color:var(--cream); background:rgba(201,173,124,.12);}
+  .gallery{display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:140px; gap:14px;}
+  .g-item{grid-column:span 2; grid-row:span 2; transition:transform .6s cubic-bezier(.16,1,.3,1), opacity .5s ease, filter .4s ease; opacity:0; transform:translateY(22px) scale(.96);}
+  .g-item.in{opacity:1; transform:none;}
+  .g-item:nth-child(3n+1){grid-row:span 1;}
+  .g-item:nth-child(5n+2){grid-column:span 1;}
+  .g-item .plate{width:100%; height:100%; transition:transform .5s ease;}
+  .gallery:hover .g-item.in{opacity:.5; filter:saturate(.7);}
+  .gallery:hover .g-item.in:hover{opacity:1; filter:none;}
+  .g-item:hover .plate{transform:scale(1.035);}
+  .g-item.hide{display:none;}
+  @media (prefers-reduced-motion:reduce){ .g-item{opacity:1; transform:none;} }
+  @media (max-width:760px){ .gallery{grid-template-columns:repeat(2,1fr); grid-auto-rows:150px;} .g-item{grid-column:span 1 !important; grid-row:span 1 !important;} }
+
+  /* storytelling */
+  .story{display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;}
+  .story .plate{aspect-ratio:4/5;}
+  .story h2{font-size:clamp(1.9rem,3.2vw,2.7rem); font-weight:450; line-height:1.15; margin-bottom:20px;}
+  .story p{color:var(--text-muted); max-width:44ch; margin-bottom:28px;}
+  @media (max-width:860px){ .story{grid-template-columns:1fr;} .story .plate{order:-1;} }
+
+  /* ateliers */
+  .ateliers{background:var(--cream-2);}
+  .at-grid{display:grid; grid-template-columns:1.2fr 1fr; gap:56px; align-items:center;}
+  .at-list{display:grid; gap:18px; margin:30px 0 34px;}
+  .at-list div{display:flex; align-items:baseline; gap:14px; border-bottom:1px solid var(--line); padding-bottom:16px;}
+  .at-list strong{font-family:'Fraunces',serif; font-weight:450; font-size:1.02rem; min-width:150px;}
+  .at-list span{color:var(--text-muted); font-size:.9rem;}
+  .at-grid .plate{aspect-ratio:4/5;}
+  @media (max-width:860px){ .at-grid{grid-template-columns:1fr;} .at-grid .plate{order:-1; aspect-ratio:16/9;} }
+
+  /* france x rdc */
+  .fxr{text-align:center;}
+  .fxr .wrap{max-width:760px;}
+  .fxr h2{font-size:clamp(2rem,4vw,3rem); font-weight:450; margin-bottom:20px;}
+  .fxr p{color:var(--text-muted); max-width:50ch; margin:0 auto 40px;}
+  .flags{display:flex; justify-content:center; gap:0;}
+  .flags .plate{width:220px; height:150px;}
+  .flags .plate:first-child{clip-path:polygon(0 0,90% 0,100% 100%,0 100%);}
+  .flags .plate:last-child{clip-path:polygon(10% 0,100% 0,100% 100%,0 100%); margin-left:-40px;}
+
+  /* about */
+  .about{display:grid; grid-template-columns:.85fr 1.15fr; gap:60px; align-items:center;}
+  .about .plate{aspect-ratio:4/5;}
+  .about h2{font-size:clamp(1.9rem,3.2vw,2.6rem); font-weight:450; margin-bottom:18px;}
+  .about p{color:var(--text-muted); max-width:50ch; margin-bottom:14px;}
+  @media (max-width:860px){ .about{grid-template-columns:1fr;} }
+
+  /* instagram */
+  .insta{background:var(--espresso); color:var(--cream); text-align:center;}
+  .insta h2{color:var(--cream); font-size:clamp(1.8rem,3vw,2.4rem); font-weight:450;}
+  .insta .handle{color:var(--gold-soft); margin:12px 0 34px; font-size:1.05rem;}
+  .insta-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:40px;}
+  .insta-grid .plate{aspect-ratio:1/1;}
+  @media (max-width:640px){ .insta-grid{grid-template-columns:repeat(3,1fr);} .insta-grid .plate:nth-child(n+7){display:none;} }
+
+  /* final cta */
+  .final{text-align:center;}
+  .final h2{font-size:clamp(2rem,4.2vw,3.1rem); font-weight:450; line-height:1.15; max-width:16ch; margin:0 auto 30px;}
+  .final-ctas{display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom:70px;}
+
+  /* form */
+  .form-box{background:var(--cream-2); border:1px solid var(--line); padding:44px; max-width:640px; margin:0 auto; text-align:left;}
+  .form-box h3{font-family:'Fraunces',serif; font-weight:450; font-size:1.3rem; margin-bottom:26px; text-align:center;}
+  .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .form-grid .full{grid-column:1/-1;}
+  label{display:block; font-size:.75rem; letter-spacing:.02em; color:var(--text-muted); margin-bottom:7px;}
+  input,select,textarea{width:100%; padding:12px 14px; border:1px solid var(--line); background:var(--cream); font-family:'Manrope',sans-serif; font-size:.9rem; color:var(--espresso); border-radius:1px;}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--gold); outline-offset:1px;}
+  textarea{resize:vertical; min-height:80px;}
+  .form-submit{margin-top:22px; width:100%; justify-content:center; border:none;}
+  .confirm{display:none; text-align:center; padding:20px; font-size:.9rem; color:var(--espresso);}
+  .confirm.show{display:block;}
+  @media (max-width:600px){ .form-grid{grid-template-columns:1fr;} .form-box{padding:28px 22px;} }
+
+  /* footer */
+  footer{background:var(--espresso); color:rgba(246,241,233,.7); padding:56px 0 calc(30px + env(safe-area-inset-bottom,0px));}
+  .foot-top{display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:30px; padding-bottom:36px; border-bottom:1px solid rgba(246,241,233,.14);}
+  .foot-top .logo{color:var(--cream);}
+  .foot-links{display:flex; gap:40px; flex-wrap:wrap;}
+  .foot-links div{display:flex; flex-direction:column; gap:10px; font-size:.85rem;}
+  .foot-links a:hover{color:var(--cream);}
+  .foot-bottom{display:flex; justify-content:space-between; padding-top:26px; font-size:.75rem; flex-wrap:wrap; gap:10px;}
+
+  /* whatsapp float */
+  .wa-float{position:fixed; right:20px; bottom:calc(20px + env(safe-area-inset-bottom,0px)); width:52px; height:52px; border-radius:50%; background:#25D366; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(0,0,0,.25); z-index:60; cursor:pointer;}
+  .wa-float svg{width:26px; height:26px; fill:#fff;}
+
+  /* profondeur : grandes images qui se révèlent en avançant */
+  .reveal-zoom{opacity:0; transform:scale(1.08); filter:blur(6px); transition:opacity 1s ease, transform 1s cubic-bezier(.16,1,.3,1), filter 1s ease;}
+  .reveal-zoom.in{opacity:1; transform:scale(1); filter:blur(0);}
+
+  /* France x RDC : les deux univers se rencontrent */
+  .flags .plate:first-child{transform:translateX(-36px) rotate(-3deg); opacity:0; transition:transform .9s cubic-bezier(.16,1,.3,1), opacity .9s ease;}
+  .flags .plate:last-child{transform:translateX(36px) rotate(3deg); opacity:0; transition:transform .9s cubic-bezier(.16,1,.3,1) .12s, opacity .9s ease .12s;}
+  .flags.in .plate{transform:none; opacity:1;}
+
+  @media (prefers-reduced-motion:reduce){
+    .reveal-zoom{opacity:1; transform:none; filter:none;}
+    .flags .plate{opacity:1; transform:none;}
+  }
+
+  /* curseur discret (desktop uniquement) */
+  html.has-cursor, html.has-cursor a, html.has-cursor button{cursor:none;}
+  html.has-cursor input, html.has-cursor textarea, html.has-cursor select{cursor:auto;}
+  .cursor-dot{position:fixed; top:0; left:0; width:10px; height:10px; border-radius:50%; background:var(--gold); pointer-events:none; z-index:80; display:flex; align-items:center; justify-content:center; overflow:hidden; white-space:nowrap; font-size:.6rem; letter-spacing:.05em; color:var(--espresso); font-weight:700; transition:width .25s ease, height .25s ease, background .25s ease;}
+  .cursor-dot.big{width:58px; height:58px; background:rgba(173,138,85,.2); border:1px solid var(--gold);}
+
+  /* reveal */
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1; transform:none;}
+  @media (prefers-reduced-motion:reduce){ .reveal{opacity:1; transform:none; transition:none;} }
+
+  :focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <div class="logo">LD HOUSE<span>OF MAKE UP</span></div>
+    <div class="nav-links">
+      <a href="#accueil">Accueil</a>
+      <a href="#prestations">Prestations</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#ateliers">Ateliers</a>
+      <a href="#apropos">À propos</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#contact" class="btn btn-ghost">Réserver / Devis</a>
+      <button class="burger" id="burger" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#accueil">Accueil</a>
+    <a href="#prestations">Prestations</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#ateliers">Ateliers</a>
+    <a href="#apropos">À propos</a>
+    <a href="#contact">Contact</a>
+  </div>
+</header>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<div class="hero-stage">
+<section class="hero" id="accueil">
+  <div class="wrap hero-grid">
+    <div id="heroContent">
+      <div class="hero-tag"><span class="dot"></span>RDC · FRANCE</div>
+      <h1>
+        <span class="line-mask"><span class="line-inner">Votre beauté.</span></span>
+        <span class="line-mask"><span class="line-inner em">Votre signature.</span></span>
+      </h1>
+      <p class="sub">Maquillage professionnel, expériences beauté et ateliers entre la RDC et la France.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-primary">Demander un devis</a>
+        <a href="#prestations" class="btn btn-ghost">Découvrir les prestations</a>
+      </div>
+    </div>
+    <div class="plate hero-plate" data-label="Portrait — à intégrer"></div>
+  </div>
+</section>
+</div>
+
+<section class="intro">
+  <div class="wrap intro">
+    <h2>Plus qu'un maquillage,<br>une expérience.</h2>
+    <div class="intro-text">
+      <p>LD House of Make Up accompagne chaque projet avec une approche personnalisée, pensée pour révéler la personnalité, le style et l'occasion.</p>
+      <div class="signature">Laura Dineka<small>MAKE UP ARTIST</small></div>
+    </div>
+  </div>
+</section>
+
+<section id="prestations">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">Prestations</div>
+        <h2>Des catégories pensées<br>pour chaque projet</h2>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card reveal">
+        <div class="plate" data-label="Maquillage"></div>
+        <div class="card-body">
+          <h3>Maquillage</h3>
+          <p>Une mise en beauté adaptée à votre événement, votre style et votre image.</p>
+          <a href="#contact">Découvrir</a>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="plate" data-label="Événements"></div>
+        <div class="card-body">
+          <h3>Événements</h3>
+          <p>Une expérience beauté pensée pour les occasions spéciales et événements.</p>
+          <a href="#contact">Découvrir</a>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="plate" data-label="Shootings"></div>
+        <div class="card-body">
+          <h3>Shootings & image</h3>
+          <p>Mise en beauté pensée pour les séances photo et projets visuels.</p>
+          <a href="#contact">Découvrir</a>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="plate" data-label="Ateliers"></div>
+        <div class="card-body">
+          <h3>Ateliers beauté</h3>
+          <p>Ateliers et expériences autour du maquillage et de la mise en beauté.</p>
+          <a href="#ateliers">Découvrir</a>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="plate" data-label="Collaborations"></div>
+        <div class="card-body">
+          <h3>Collaborations</h3>
+          <p>Projets avec marques, entreprises, créateurs et événements.</p>
+          <a href="#contact">Découvrir</a>
+        </div>
+      </div>
+    </div>
+    <p class="note">Catégories de services à confirmer avec Laura — prestations sur demande.</p>
+  </div>
+</section>
+
+<section class="portfolio" id="portfolio">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <div class="eyebrow">Portfolio</div>
+        <h2>Un aperçu de l'univers<br>LD House of Make Up</h2>
+      </div>
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Tout</button>
+      <button class="filter-btn" data-filter="makeup">Make Up</button>
+      <button class="filter-btn" data-filter="beauty">Beauty</button>
+      <button class="filter-btn" data-filter="events">Events</button>
+      <button class="filter-btn" data-filter="editorial">Editorial</button>
+    </div>
+    <div class="gallery" id="gallery">
+      <div class="g-item" data-cat="makeup"><div class="plate" data-label="Make Up"></div></div>
+      <div class="g-item" data-cat="editorial"><div class="plate" data-label="Editorial"></div></div>
+      <div class="g-item" data-cat="events"><div class="plate" data-label="Events"></div></div>
+      <div class="g-item" data-cat="beauty"><div class="plate" data-label="Beauty"></div></div>
+      <div class="g-item" data-cat="makeup"><div class="plate" data-label="Make Up"></div></div>
+      <div class="g-item" data-cat="editorial"><div class="plate" data-label="Editorial"></div></div>
+      <div class="g-item" data-cat="beauty"><div class="plate" data-label="Beauty"></div></div>
+      <div class="g-item" data-cat="events"><div class="plate" data-label="Events"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="story">
+  <div class="wrap story">
+    <div class="plate reveal-zoom" data-label="Composition — à intégrer"></div>
+    <div>
+      <div class="eyebrow reveal">Approche</div>
+      <h2 class="reveal">Chaque visage<br>raconte quelque chose.</h2>
+      <p class="reveal">Une approche personnalisée qui s'adapte au visage, à la personnalité et à l'occasion de chacune, pour révéler une beauté qui reste toujours identifiable.</p>
+      <a href="#contact" class="btn btn-ghost reveal">Parler de mon projet</a>
+    </div>
+  </div>
+</section>
+
+<section class="ateliers" id="ateliers">
+  <div class="wrap at-grid">
+    <div>
+      <div class="eyebrow reveal">Ateliers beauté</div>
+      <h2 class="reveal" style="font-size:clamp(1.9rem,3.2vw,2.6rem); font-weight:450; margin:14px 0 6px;">Apprendre, expérimenter,<br>révéler.</h2>
+      <div class="at-list">
+        <div><strong>Individuels</strong><span>Sur demande</span></div>
+        <div><strong>Groupe</strong><span>Sur demande</span></div>
+        <div><strong>Événements</strong><span>Disponible selon projet</span></div>
+        <div><strong>Expériences beauté</strong><span>Contactez-nous pour connaître les disponibilités</span></div>
+      </div>
+      <a href="#contact" class="btn btn-primary">Organiser un atelier</a>
+    </div>
+    <div class="plate reveal-zoom" data-label="Atelier — à intégrer"></div>
+  </div>
+</section>
+
+<section class="fxr">
+  <div class="wrap">
+    <div class="eyebrow reveal">Positionnement</div>
+    <h2 class="reveal">Entre la France et la RDC.</h2>
+    <p class="reveal">Une présence qui relie deux univers, deux cultures et deux marchés autour d'une même passion pour la beauté.</p>
+    <div class="flags reveal">
+      <div class="plate" data-label="RDC"></div>
+      <div class="plate light" data-label="France"></div>
+    </div>
+  </div>
+</section>
+
+<section id="apropos">
+  <div class="wrap about">
+    <div class="plate reveal-zoom" data-label="Portrait — à intégrer"></div>
+    <div>
+      <div class="eyebrow reveal">À propos</div>
+      <h2 class="reveal">À propos de Laura</h2>
+      <p class="reveal">Laura Dineka est une professionnelle du maquillage et de la beauté, entre la RDC et la France. Sa biographie complète sera ajoutée ici dès qu'elle sera transmise.</p>
+    </div>
+  </div>
+</section>
+
+<section class="insta">
+  <div class="wrap">
+    <h2 class="reveal">Retrouvez l'univers<br>LD House of Make Up</h2>
+    <div class="handle reveal">@lauradineka</div>
+    <div class="insta-grid">
+      <div class="plate" data-label=""></div>
+      <div class="plate" data-label=""></div>
+      <div class="plate" data-label=""></div>
+      <div class="plate" data-label=""></div>
+      <div class="plate" data-label=""></div>
+      <div class="plate" data-label=""></div>
+      <div class="plate" data-label=""></div>
+      <div class="plate" data-label=""></div>
+      <div class="plate" data-label=""></div>
+      <div class="plate" data-label=""></div>
+    </div>
+    <a href="https://instagram.com/lauradineka" target="_blank" class="btn btn-ghost light">Voir sur Instagram</a>
+  </div>
+</section>
+
+<section class="final" id="contact">
+  <div class="wrap">
+    <h2 class="reveal">Votre prochain projet mérite une mise en beauté à sa hauteur.</h2>
+    <div class="final-ctas reveal">
+      <a href="#devis" class="btn btn-primary">Demander un devis</a>
+      <a href="#devis" class="btn btn-ghost">Parler de mon projet</a>
+    </div>
+    <div class="form-box reveal" id="devis">
+      <h3>Demande de devis</h3>
+      <form id="quoteForm">
+        <div class="form-grid">
+          <div><label>Nom</label><input type="text" required></div>
+          <div><label>Téléphone / WhatsApp</label><input type="tel" required></div>
+          <div><label>Email</label><input type="email" required></div>
+          <div><label>Type de prestation</label>
+            <select>
+              <option>Maquillage</option>
+              <option>Événement</option>
+              <option>Shooting & image</option>
+              <option>Atelier beauté</option>
+              <option>Collaboration</option>
+            </select>
+          </div>
+          <div><label>Date souhaitée</label><input type="date"></div>
+          <div><label>Lieu / ville</label><input type="text"></div>
+          <div class="full"><label>Message</label><textarea></textarea></div>
+        </div>
+        <button type="submit" class="btn btn-primary form-submit">Envoyer ma demande</button>
+      </form>
+      <div class="confirm" id="confirmMsg">Merci — votre demande a bien été prise en compte. Laura vous répondra très prochainement.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <div class="logo">LD HOUSE<span>OF MAKE UP</span></div>
+        <p style="margin-top:14px; font-size:.82rem;">Make Up · Beauty · Experiences</p>
+      </div>
+      <div class="foot-links">
+        <div>
+          <a href="https://instagram.com/lauradineka" target="_blank">Instagram</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div>
+          <a href="#prestations">Prestations</a>
+          <a href="#ateliers">Ateliers</a>
+        </div>
+        <div>
+          <a href="#">Mentions légales</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 LD House of Make Up</span>
+      <span>Démo — proposée par NEW SYSTEM</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/" target="_blank" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.87 9.87 0 0 0 12.04 2m0 1.67c2.21 0 4.29.86 5.85 2.42a8.23 8.23 0 0 1 2.41 5.82c0 4.55-3.7 8.25-8.26 8.25a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.56 3.7-8.25 8.24-8.25M8.53 6.85c-.16 0-.43.06-.65.31s-.86.84-.86 2.05.88 2.38 1 2.55c.12.16 1.7 2.7 4.2 3.68 2.08.82 2.5.66 2.95.62.45-.04 1.45-.59 1.65-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.45-.28s-1.45-.71-1.68-.79c-.22-.08-.39-.12-.55.13-.16.24-.63.79-.77.95-.14.16-.28.18-.52.06-.24-.12-1.01-.37-1.92-1.18-.71-.63-1.19-1.41-1.33-1.65-.14-.24-.01-.37.1-.49.11-.11.25-.28.37-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.36-.77-1.86-.2-.48-.4-.42-.56-.43z"/></svg>
+</a>
+
+<script>
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  burger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      document.querySelectorAll('.g-item').forEach(item => {
+        item.classList.toggle('hide', f !== 'all' && item.dataset.cat !== f);
+      });
+    });
+  });
+
+  const form = document.getElementById('quoteForm');
+  const confirmMsg = document.getElementById('confirmMsg');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    form.style.display = 'none';
+    confirmMsg.classList.add('show');
+  });
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal, .reveal-zoom, .g-item').forEach(el => io.observe(el));
+
+  // scroll = caméra : header, barre de progression, profondeur du hero
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const headerEl = document.querySelector('header');
+  const progressBar = document.getElementById('scrollProgress');
+  const heroStage = document.querySelector('.hero-stage');
+  const heroContent = document.getElementById('heroContent');
+  const heroPlate = document.querySelector('.hero-plate');
+
+  function onScroll(){
+    const y = window.scrollY;
+    headerEl.classList.toggle('scrolled', y > 20);
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    if (progressBar && docH > 0) progressBar.style.width = (y / docH * 100) + '%';
+
+    if (!reduceMotion && heroStage && heroContent && heroPlate) {
+      const stageH = heroStage.offsetHeight - window.innerHeight;
+      const p = stageH > 0 ? Math.min(Math.max(y / stageH, 0), 1) : 0;
+      heroPlate.style.setProperty('--hero-scale', (1 + p * 0.14).toFixed(3));
+      heroContent.style.setProperty('--hero-shift', (p * -60).toFixed(1) + 'px');
+      heroContent.style.setProperty('--hero-fade', Math.max(1 - p * 1.15, 0).toFixed(2));
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // curseur discret (desktop uniquement)
+  if (window.matchMedia('(pointer: fine)').matches && !reduceMotion) {
+    document.documentElement.classList.add('has-cursor');
+    const cursor = document.createElement('div');
+    cursor.className = 'cursor-dot';
+    document.body.appendChild(cursor);
+    let mx = 0, my = 0, raf = null;
+    window.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      if (!raf) raf = requestAnimationFrame(() => {
+        cursor.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
+        raf = null;
+      });
+    });
+    document.querySelectorAll('.plate').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.classList.add('big'); cursor.textContent = 'VOIR'; });
+      el.addEventListener('mouseleave', () => { cursor.classList.remove('big'); cursor.textContent = ''; });
+    });
+    document.querySelectorAll('.btn').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.classList.add('big'); cursor.textContent = 'OUVRIR'; });
+      el.addEventListener('mouseleave', () => { cursor.classList.remove('big'); cursor.textContent = ''; });
+    });
+  }
+</script>
+
+</body>
+</html>
