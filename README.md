@@ -13,7 +13,7 @@ npm run dev
 
 Le site est sur http://localhost:3000. L'administration est sur http://localhost:3000/admin/login.
 
-Copier `.env.example` vers `.env.local` avant un nouvel environnement. Le compte admin est créé au premier démarrage à partir de `ADMIN_EMAIL` et `ADMIN_PASSWORD`.
+La démo ne crée pas de fichier de base de données. Le compte admin de test est écrit dans `lib/demo-account.ts` et affiché sur la page de connexion.
 
 ## Ce qui est volontairement vide
 

@@ -1,22 +1,10 @@
 import { createClient } from "@libsql/client";
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/libsql";
-import bcrypt from "bcryptjs";
-import fs from "fs";
-import path from "path";
 import * as schema from "@/lib/db/schema";
 import { nowIso, slugify } from "@/lib/utils";
 
-const dataDir = path.join(process.cwd(), "data");
-
-function databaseUrl() {
-  if (process.env.DATABASE_URL) return process.env.DATABASE_URL;
-  fs.mkdirSync(dataDir, { recursive: true });
-  const file = path.join(dataDir, "ldhouse.db").replace(/\\/g, "/");
-  return `file:${file}`;
-}
-
-const client = createClient({ url: databaseUrl() });
+const client = createClient({ url: ":memory:" });
 export const db = drizzle(client, { schema });
 
 let ready: Promise<void> | null = null;
@@ -224,27 +212,5 @@ async function init() {
       key: "instagram_url",
       value: "https://instagram.com/lauradineka",
     });
-  }
-
-  const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-  const password = process.env.ADMIN_PASSWORD;
-  if (email && password) {
-    const existing = await db.select().from(schema.users).where(eq(schema.users.email, email)).limit(1);
-    if (existing.length === 0) {
-      const admins = await db.select().from(schema.users).where(eq(schema.users.role, "admin")).limit(1);
-      const passwordHash = await bcrypt.hash(password, 12);
-      if (admins[0]) {
-        await db.update(schema.users).set({ email, passwordHash }).where(eq(schema.users.id, admins[0].id));
-      } else {
-        await db.insert(schema.users).values({
-          id: crypto.randomUUID(),
-          email,
-          name: "Administration",
-          passwordHash,
-          role: "admin",
-          createdAt: nowIso(),
-        });
-      }
-    }
   }
 }
