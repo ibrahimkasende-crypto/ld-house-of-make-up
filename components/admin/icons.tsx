@@ -16,7 +16,9 @@ export type IconName =
   | "clock"
   | "check"
   | "coins"
-  | "search";
+  | "search"
+  | "mail"
+  | "lock";
 
 export function Icon({ name, size = 18 }: { name: IconName; size?: number }) {
   return (
@@ -140,6 +142,18 @@ const paths: Record<IconName, React.ReactNode> = {
     <>
       <circle cx="11" cy="11" r="6" />
       <path d="M16 16l4 4" />
+    </>
+  ),
+  mail: (
+    <>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="M4 7l8 6 8-6" />
+    </>
+  ),
+  lock: (
+    <>
+      <rect x="5" y="11" width="14" height="9" rx="2" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
     </>
   ),
 };

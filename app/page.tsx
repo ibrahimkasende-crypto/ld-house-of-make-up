@@ -258,6 +258,7 @@ export default async function HomePage() {
               <div>
                 <a href="/mentions-legales">Mentions légales</a>
                 <a href="/confidentialite">Confidentialité</a>
+                <a href="/admin/login">Espace gestion</a>
               </div>
             </div>
           </div>

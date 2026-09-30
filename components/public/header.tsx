@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 const links = [
@@ -21,6 +22,7 @@ export function Header() {
           {links.map(([href, label]) => <a key={href} href={href}>{label}</a>)}
         </div>
         <div className="nav-cta">
+          <Link href="/admin/login" className="nav-admin">Gestion</Link>
           <a href="#contact" className="btn btn-ghost">Réserver / Devis</a>
           <button className="burger" aria-expanded={open} aria-controls="mobileMenu" aria-label={open ? "Fermer le menu" : "Ouvrir le menu"} onClick={() => setOpen((value) => !value)}>
             <span /><span /><span />
@@ -32,6 +34,7 @@ export function Header() {
           {links.map(([href, label]) => (
             <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>
           ))}
+          <Link href="/admin/login" onClick={() => setOpen(false)}>Espace gestion</Link>
         </div>
       </div>
     </header>
